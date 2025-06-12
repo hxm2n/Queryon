@@ -168,9 +168,10 @@ struct PostWriteView: View {
         }
 
         let tagList = tagsText
-            .split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .components(separatedBy: "#")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
+
 
         for tag in tagList {
             body.append("--\(boundary)\r\n")
