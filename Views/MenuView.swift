@@ -170,31 +170,13 @@ struct MenuView: View {
                         .background(.white)
                         .cornerRadius(10)
                     }
-                    func withdrawAccount() {
-                        guard let url = URL(string: "http://192.168.1.103:3000/users/delete") else { return }
-                        
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "DELETE"
-                        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-                        URLSession.shared.dataTask(with: request) { _, response, error in
-                            if let error = error {
-                                print("❌ 탈퇴 실패:", error.localizedDescription)
-                                return
-                            }
-
-                            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
-                                DispatchQueue.main.async {
-
-                                    UserDefaults.standard.removeObject(forKey: "token")
-                                    UserDefaults.standard.removeObject(forKey: "userEmail")
-                                    UserDefaults.standard.removeObject(forKey: "userName")
-                                    isLoggedIn = false
-                                }
-                            } else {
-                                print("❌ 탈퇴 응답 오류")
-                            }
-                        }.resume()
+                    .alert("정말 탈퇴하시겠습니까?", isPresented: $showWithdrawAlert) {
+                        Button("탈퇴", role: .destructive) {
+                            withdrawAccount()
+                        }
+                        Button("취소", role: .cancel) {}
+                    } message: {
+                        Text("탈퇴 시 계정 정보는 삭제되며 복구할 수 없습니다.")
                     }
 
 
@@ -232,5 +214,31 @@ struct MenuView: View {
                 profileImage = image
             }
         }
+    }
+
+    func withdrawAccount() {
+        guard let url = URL(string: "http://192.168.1.103:3000/users/delete") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            if let error = error {
+                print("❌ 탈퇴 실패:", error.localizedDescription)
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
+                DispatchQueue.main.async {
+                    UserDefaults.standard.removeObject(forKey: "token")
+                    UserDefaults.standard.removeObject(forKey: "userEmail")
+                    UserDefaults.standard.removeObject(forKey: "userName")
+                    isLoggedIn = false
+                }
+            } else {
+                print("❌ 탈퇴 응답 오류")
+            }
+        }.resume()
     }
 }
