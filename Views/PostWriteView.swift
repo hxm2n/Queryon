@@ -66,10 +66,11 @@ struct PostWriteView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                PhotosPicker(selection: $selectedPhotos, maxSelectionCount: 5, matching: .images) {
-                    Label("사진 첨부 (최대 5장)", systemImage: "photo.on.rectangle")
+                PhotosPicker(selection: $selectedPhotos, matching: .images) {
+                    Label("사진 첨부", systemImage: "photo.on.rectangle")
                         .foregroundColor(Color(hex: "#6C63FF"))
                 }
+
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
