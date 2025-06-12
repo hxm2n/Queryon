@@ -44,10 +44,18 @@ struct PostWriteView: View {
                 .background(Color.white)
                 .cornerRadius(10)
 
-            TextField("태그를 입력하세요 (예: #Swift #iOS)", text: $tagsText)
+            TextField("태그를 입력하세요 (스페이스로 구분)", text: $tagsText)
                 .padding()
                 .background(Color.white)
                 .cornerRadius(10)
+                .onChange(of: tagsText) { newValue in
+                    // 스페이스 입력 감지
+                    if let lastChar = newValue.last, lastChar == " " {
+                        let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                        tagsText = trimmed + " #"
+                    }
+                }
+
 
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 10)
