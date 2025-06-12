@@ -29,16 +29,6 @@
 		2EF862E72DDC8832007ACD4B /* QueryonUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QueryonUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2EDECF852DDC938000B1E00F /* Exceptions for "Views" folder in "Queryon" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Untitled.swift,
-			);
-			target = 2EF862CF2DDC8831007ACD4B /* Queryon */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2EBFD73B2DDC898B00259CBB /* Models */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -47,9 +37,6 @@
 		};
 		2EBFD73C2DDC899700259CBB /* Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				2EDECF852DDC938000B1E00F /* Exceptions for "Views" folder in "Queryon" target */,
-			);
 			path = Views;
 			sourceTree = "<group>";
 		};

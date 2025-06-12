@@ -44,7 +44,7 @@ struct PostWriteView: View {
                 .background(Color.white)
                 .cornerRadius(10)
 
-            TextField("태그를 입력하세요 (쉼표로 구분)", text: $tagsText)
+            TextField("태그를 입력하세요 (예: #Swift #iOS)", text: $tagsText)
                 .padding()
                 .background(Color.white)
                 .cornerRadius(10)
