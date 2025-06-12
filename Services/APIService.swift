@@ -2,7 +2,7 @@ import Foundation
 
 class BoardAPIService {
     static let shared = BoardAPIService()
-    private let baseURL = "http://192.168.1.112:3000/api"
+    private let baseURL = "http://192.168.1.103:3000/api"
     private let tokenKey = "auth_token"
     private var _authToken: String?
 

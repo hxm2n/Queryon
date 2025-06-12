@@ -98,14 +98,21 @@ struct AnswerView: View {
                     Task {
                         do {
                             posts = try await BoardAPIService.shared.fetchPosts()
-                            myQuestions += 1
-                            print("🟢 나의 질문 수 증가: \(myQuestions)")
+
+                            let userId = UserDefaults.standard.integer(forKey: "userId")
+
+                            let myPosts = posts.filter { $0.authorId == userId }
+                            myQuestions = myPosts.count
+
+                            print("🟢 나의 질문 수 재계산: \(myQuestions)")
                         } catch {
                             print("❌ 게시글 새로고침 실패:", error.localizedDescription)
                         }
                     }
                 }
             }
+
+
             .background(Color(hex: "#F5F7FA").ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle()) // iPad 호환성

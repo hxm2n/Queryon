@@ -145,7 +145,7 @@ struct PostWriteView: View {
     }
 
     func uploadPost(title: String, content: String, tagsText: String, images: [Data]) async {
-        guard let url = URL(string: "http://192.168.1.112:3000/api/posts") else { return }
+        guard let url = URL(string: "http://192.168.1.103:3000/api/posts") else { return }
         guard let token = BoardAPIService.shared.authToken else {
             print("❌ 토큰 없음")
             return
