@@ -170,11 +170,33 @@ struct MenuView: View {
                         .background(.white)
                         .cornerRadius(10)
                     }
-                    .alert("잠깐만요!", isPresented: $showWithdrawAlert) {
-                        Button("확인", role: .cancel) {}
-                    } message: {
-                        Text("회원탈퇴하지 마세요... 🥺\n더 나은 서비스를 제공하도록 하겠습니다!")
+                    func withdrawAccount() {
+                        guard let url = URL(string: "http://192.168.1.103:3000/users/delete") else { return }
+                        
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "DELETE"
+                        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+                        URLSession.shared.dataTask(with: request) { _, response, error in
+                            if let error = error {
+                                print("❌ 탈퇴 실패:", error.localizedDescription)
+                                return
+                            }
+
+                            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
+                                DispatchQueue.main.async {
+
+                                    UserDefaults.standard.removeObject(forKey: "token")
+                                    UserDefaults.standard.removeObject(forKey: "userEmail")
+                                    UserDefaults.standard.removeObject(forKey: "userName")
+                                    isLoggedIn = false
+                                }
+                            } else {
+                                print("❌ 탈퇴 응답 오류")
+                            }
+                        }.resume()
                     }
+
 
                 }
                 .padding(.horizontal)
