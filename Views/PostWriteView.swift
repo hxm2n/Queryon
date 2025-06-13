@@ -2,11 +2,12 @@ import SwiftUI
 import PhotosUI
 
 struct PostWriteView: View {
+    let editingPost: Post?
     @Environment(\.dismiss) var dismiss
 
     @State private var title: String
     @State private var content: String
-    @State private var tagsText: String = ""
+    @State private var tagsText: String
     @State private var showAlert = false
     @State private var showSuccessAlert = false
     @State private var selectedPhotos: [PhotosPickerItem] = []
@@ -14,12 +15,19 @@ struct PostWriteView: View {
 
     @AppStorage("userEmail") var userEmail: String = ""
 
-    var editingPost: Post?
-
     init(editingPost: Post? = nil) {
         self.editingPost = editingPost
         _title = State(initialValue: editingPost?.title ?? "")
         _content = State(initialValue: editingPost?.content ?? "")
+        _tagsText = State(initialValue: editingPost?.tags?.map { "#\($0)" }.joined(separator: " ") ?? "")
+    }
+
+    var tagList: [String] {
+        tagsText
+            .replacingOccurrences(of: "#", with: "")
+            .components(separatedBy: .whitespaces)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
     }
 
     var body: some View {
@@ -49,13 +57,11 @@ struct PostWriteView: View {
                 .background(Color.white)
                 .cornerRadius(10)
                 .onChange(of: tagsText) { newValue in
-                    // 스페이스 입력 감지
                     if let lastChar = newValue.last, lastChar == " " {
                         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                         tagsText = trimmed + " #"
                     }
                 }
-
 
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 10)
@@ -79,10 +85,9 @@ struct PostWriteView: View {
                         .foregroundColor(Color(hex: "#6C63FF"))
                 }
 
-
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(Array(imageDataList.enumerated()), id: \.offset) { index, data in
+                        ForEach(Array(imageDataList.enumerated()), id: \ .offset) { index, data in
                             if let uiImage = UIImage(data: data) {
                                 ZStack(alignment: .topTrailing) {
                                     Image(uiImage: uiImage)
@@ -116,7 +121,7 @@ struct PostWriteView: View {
                     showAlert = true
                 } else {
                     Task {
-                        await uploadPost(title: title, content: content, tagsText: tagsText, images: imageDataList)
+                        await uploadPost(title: title, content: content, tags: tagList, images: imageDataList)
                     }
                 }
             }) {
@@ -132,7 +137,7 @@ struct PostWriteView: View {
         .background(Color(hex: "#F5F7FA").ignoresSafeArea())
         .navigationBarHidden(true)
         .alert("입력 누락", isPresented: $showAlert) {
-            Button("확인", role: .cancel) { }
+            Button("확인", role: .cancel) {}
         } message: {
             Text("제목과 내용을 모두 입력해주세요.")
         }
@@ -153,8 +158,8 @@ struct PostWriteView: View {
         }
     }
 
-    func uploadPost(title: String, content: String, tagsText: String, images: [Data]) async {
-        guard let url = URL(string: "http://192.168.1.103:3000/api/posts") else { return }
+    func uploadPost(title: String, content: String, tags: [String], images: [Data]) async {
+        guard let url = URL(string: "http://192.168.1.41:3000/api/posts") else { return }
         guard let token = BoardAPIService.shared.authToken else {
             print("❌ 토큰 없음")
             return
@@ -175,13 +180,7 @@ struct PostWriteView: View {
             body.append("\(value)\r\n")
         }
 
-        let tagList = tagsText
-            .components(separatedBy: "#")
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-
-
-        for tag in tagList {
+        for tag in tags {
             body.append("--\(boundary)\r\n")
             body.append("Content-Disposition: form-data; name=\"tags\"\r\n\r\n")
             body.append("\(tag)\r\n")
@@ -204,7 +203,6 @@ struct PostWriteView: View {
 
             if httpResponse.statusCode == 201 {
                 showSuccessAlert = true
-
                 let key = "myQuestions_\(userEmail)"
                 let current = UserDefaults.standard.integer(forKey: key)
                 UserDefaults.standard.set(current + 1, forKey: key)
@@ -222,7 +220,6 @@ struct PostWriteView: View {
     }
 }
 
-// MARK: - Data 확장
 extension Data {
     mutating func append(_ string: String) {
         if let data = string.data(using: .utf8) {

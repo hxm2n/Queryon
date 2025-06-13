@@ -117,7 +117,7 @@ struct LoginView: View {
     }
 
     func login() {
-        let baseURL = "http://192.168.1.103:3000/api"
+        let baseURL = "http://192.168.1.41:3000/api"
         guard let url = URL(string: "\(baseURL)/auth/login") else {
             errorMessage = "서버 주소 오류"
             return
@@ -207,7 +207,7 @@ struct LoginView: View {
 
 
     func resendVerification(userId: Int) {
-        guard let url = URL(string: "http://192.168.1.103:3000/api/auth/resend-verification") else {
+        guard let url = URL(string: "http://192.168.1.41:3000/api/auth/resend-verification") else {
             errorMessage = "서버 주소 오류"
             return
         }

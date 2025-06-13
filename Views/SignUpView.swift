@@ -96,7 +96,7 @@ struct SignUpView: View {
         isLoading = true
         errorMessage = nil
 
-        let baseURL = "http://192.168.1.103:3000/api"
+        let baseURL = "http://192.168.1.41:3000/api"
         guard let url = URL(string: "\(baseURL)/auth/register") else {
             errorMessage = "서버 주소 오류"
             isLoading = false

@@ -217,7 +217,7 @@ struct MenuView: View {
     }
 
     func withdrawAccount() {
-        guard let url = URL(string: "http://192.168.1.103:3000/users/delete") else { return }
+        guard let url = URL(string: "http://192.168.1.41:3000/users/delete") else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"

@@ -2,7 +2,7 @@ import Foundation
 
 class BoardAPIService {
     static let shared = BoardAPIService()
-    private let baseURL = "http://192.168.1.103:3000/api"
+    private let baseURL = "http://192.168.1.41:3000/api"
     private let tokenKey = "auth_token"
     private var _authToken: String?
 
@@ -90,12 +90,7 @@ class BoardAPIService {
 
     // MARK: - 게시글
 
-    func fetchPosts(
-        page: Int = 1,
-        limit: Int = 10,
-        sortBy: String = "createdAt",
-        sortOrder: String = "desc"
-    ) async throws -> [Post] {
+    func fetchPosts(page: Int = 1, limit: Int = 10, sortBy: String = "createdAt", sortOrder: String = "desc") async throws -> [Post] {
         var components = URLComponents(string: "\(baseURL)/posts")
         components?.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
@@ -181,16 +176,17 @@ class BoardAPIService {
         let request = try authorizedRequest(url: url, method: "DELETE")
         let (_, response) = try await URLSession.shared.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 else {
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
 
-        // ✅ 글 삭제 시 질문 수 차감
         var currentCount = UserDefaults.standard.integer(forKey: "myQuestions")
         if currentCount > 0 {
             currentCount -= 1
             UserDefaults.standard.setValue(currentCount, forKey: "myQuestions")
         }
+
+        print("✅ 글 삭제 성공: 상태 코드 \(httpResponse.statusCode)")
     }
 
     // MARK: - 답변
