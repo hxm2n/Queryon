@@ -57,11 +57,14 @@ struct PostWriteView: View {
                 .background(Color.white)
                 .cornerRadius(10)
                 .onChange(of: tagsText) { newValue in
-                    if let lastChar = newValue.last, lastChar == " " {
+                    guard !newValue.isEmpty else { return }
+
+                    if let lastChar = newValue.last, lastChar == " ", !newValue.hasSuffix(" #") {
                         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                         tagsText = trimmed + " #"
                     }
                 }
+
 
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 10)
@@ -159,7 +162,7 @@ struct PostWriteView: View {
     }
 
     func uploadPost(title: String, content: String, tags: [String], images: [Data]) async {
-        guard let url = URL(string: "http://192.168.1.41:3000/api/posts") else { return }
+        guard let url = URL(string: "http://192.168.1.20:3000/api/posts") else { return }
         guard let token = BoardAPIService.shared.authToken else {
             print("❌ 토큰 없음")
             return

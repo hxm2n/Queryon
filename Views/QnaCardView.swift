@@ -3,25 +3,25 @@ import SwiftUI
 struct QnaCardView: View {
     let post: Post
     var onAnswerTap: () -> Void
-
+    
     @State private var showEditView = false
     @State private var showDeleteAlert = false
     @AppStorage("myQuestions") var myQuestions: Int = 0
-
+    
     var body: some View {
         ZStack {
             NavigationLink(destination: PostDetailView(post: post)) {
                 EmptyView()
             }
             .opacity(0)
-
+            
             VStack(alignment: .leading, spacing: 10) {
                 Text(post.title)
                     .font(.headline)
                     .foregroundColor(.primary)
                     .lineLimit(1)
                     .truncationMode(.tail)
-
+                
                 if !post.content.isEmpty {
                     Text(post.content)
                         .font(.subheadline)
@@ -29,14 +29,14 @@ struct QnaCardView: View {
                         .lineLimit(2)
                         .truncationMode(.tail)
                 }
-
+                
                 HStack {
                     Spacer()
                     Text(formatDate(post.createdAt))
                         .font(.caption2)
                         .foregroundColor(.gray)
                 }
-
+                
                 if let tags = post.tags, !tags.isEmpty {
                     HStack(spacing: 6) {
                         ForEach(tags, id: \.self) { tag in
@@ -50,10 +50,10 @@ struct QnaCardView: View {
                         }
                     }
                 }
-
+                
                 HStack {
                     Spacer()
-
+                    
                     Button(action: onAnswerTap) {
                         Text("답변하기")
                             .font(.footnote)
@@ -65,7 +65,7 @@ struct QnaCardView: View {
                             .cornerRadius(8)
                     }
                     .buttonStyle(PlainButtonStyle())
-
+                    
                     Button("수정") {
                         showEditView = true
                     }
@@ -75,7 +75,7 @@ struct QnaCardView: View {
                     .sheet(isPresented: $showEditView) {
                         PostWriteView(editingPost: post)
                     }
-
+                    
                     Button("삭제") {
                         showDeleteAlert = true
                     }
@@ -108,12 +108,12 @@ struct QnaCardView: View {
             .padding(.vertical, 4)
         }
     }
-
+    
     func formatDate(_ isoString: String) -> String {
         let isoFormatter = ISO8601DateFormatter()
         let displayFormatter = DateFormatter()
         displayFormatter.dateFormat = "yyyy.MM.dd"
-
+        
         if let date = isoFormatter.date(from: isoString) {
             return displayFormatter.string(from: date)
         } else {

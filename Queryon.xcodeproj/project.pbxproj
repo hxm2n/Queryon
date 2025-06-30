@@ -60,16 +60,6 @@
 			path = Queryon;
 			sourceTree = "<group>";
 		};
-		2EF862E02DDC8832007ACD4B /* QueryonTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = QueryonTests;
-			sourceTree = "<group>";
-		};
-		2EF862EA2DDC8832007ACD4B /* QueryonUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = QueryonUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +96,6 @@
 				2EBFD73E2DDC89B100259CBB /* Services */,
 				2EBFD73F2DDC89BA00259CBB /* Utils */,
 				2EF862D22DDC8831007ACD4B /* Queryon */,
-				2EF862E02DDC8832007ACD4B /* QueryonTests */,
-				2EF862EA2DDC8832007ACD4B /* QueryonUITests */,
 				2EF862D12DDC8831007ACD4B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,9 +153,6 @@
 			dependencies = (
 				2EF862DF2DDC8832007ACD4B /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				2EF862E02DDC8832007ACD4B /* QueryonTests */,
-			);
 			name = QueryonTests;
 			packageProductDependencies = (
 			);
@@ -187,9 +172,6 @@
 			);
 			dependencies = (
 				2EF862E92DDC8832007ACD4B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				2EF862EA2DDC8832007ACD4B /* QueryonUITests */,
 			);
 			name = QueryonUITests;
 			packageProductDependencies = (
