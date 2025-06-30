@@ -118,3 +118,4 @@ struct AnswerView: View {
         .navigationViewStyle(StackNavigationViewStyle()) // iPad 호환성
     }
 }
+// 오혜민 멍청이
