@@ -22,3 +22,5 @@ struct MyNewsListView: View {
         }
     }
 }
+
+asdfasdfa
